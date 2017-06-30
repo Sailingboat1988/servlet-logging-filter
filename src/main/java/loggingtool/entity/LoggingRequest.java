@@ -1,4 +1,4 @@
-package javax.servlet.filter.logging.entity;
+package loggingtool.entity;
 
 import java.io.Serializable;
 import java.util.Map;

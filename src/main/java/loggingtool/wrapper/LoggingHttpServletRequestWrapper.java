@@ -1,4 +1,4 @@
-package javax.servlet.filter.logging.wrapper;
+package loggingtool.wrapper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;

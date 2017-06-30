@@ -1,4 +1,4 @@
-package javax.servlet.filter.logging.wrapper;
+package loggingtool.wrapper;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;

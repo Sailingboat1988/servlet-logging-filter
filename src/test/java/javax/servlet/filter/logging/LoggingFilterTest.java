@@ -1,5 +1,6 @@
 package javax.servlet.filter.logging;
 
+import loggingtool.LoggingFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

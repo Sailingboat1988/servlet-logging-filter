@@ -1,4 +1,4 @@
-package javax.servlet.filter.logging;
+package loggingtool;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,10 +11,10 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.filter.logging.entity.LoggingRequest;
-import javax.servlet.filter.logging.entity.LoggingResponse;
-import javax.servlet.filter.logging.wrapper.LoggingHttpServletRequestWrapper;
-import javax.servlet.filter.logging.wrapper.LoggingHttpServletResponseWrapper;
+import loggingtool.entity.LoggingRequest;
+import loggingtool.entity.LoggingResponse;
+import loggingtool.wrapper.LoggingHttpServletRequestWrapper;
+import loggingtool.wrapper.LoggingHttpServletResponseWrapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
