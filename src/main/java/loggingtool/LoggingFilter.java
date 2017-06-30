@@ -106,8 +106,9 @@ public class LoggingFilter implements Filter {
 			return;
 		}
 		for (String excludedPath : excludedPaths) {
-			String requestURI = httpRequest.getRequestURI();
-			if (requestURI.startsWith(excludedPath)) {
+//			String requestURI = httpRequest.getRequestURI();
+			String servletPath = httpRequest.getServletPath();
+			if (servletPath.startsWith(excludedPath)) {
 				filterChain.doFilter(httpRequest, httpResponse);
 				return;
 			}
