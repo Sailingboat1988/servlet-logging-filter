@@ -13,19 +13,13 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.nio.charset.Charset;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class LoggingHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
+	private final Charset UTF_8 = Charset.forName("UTF-8");
 	private static final String FORM_CONTENT_TYPE = "application/x-www-form-urlencoded";
 
 	private static final String METHOD_POST = "POST";
@@ -106,7 +100,7 @@ public class LoggingHttpServletRequestWrapper extends HttpServletRequestWrapper 
 				content = getContentFromParameterMap(this.parameterMap);
 			}
 			String requestEncoding = delegate.getCharacterEncoding();
-			String normalizedContent = StringUtils.normalizeSpace(new String(content, requestEncoding != null ? requestEncoding : StandardCharsets.UTF_8.name()));
+			String normalizedContent = StringUtils.normalizeSpace(new String(content, requestEncoding != null ? requestEncoding : UTF_8.name()));
 			return StringUtils.isBlank(normalizedContent) ? "[EMPTY]" : normalizedContent;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -115,14 +109,15 @@ public class LoggingHttpServletRequestWrapper extends HttpServletRequestWrapper 
 	}
 
 	private byte[] getContentFromParameterMap(Map<String, String[]> parameterMap) {
-		return parameterMap.entrySet().stream().map(e -> {
-			String[] value = e.getValue();
-			return e.getKey() + "=" + (value.length == 1 ? value[0] : Arrays.toString(value));
-		}).collect(Collectors.joining("&")).getBytes();
+//		return parameterMap.entrySet().stream().map(e -> {
+//			String[] value = e.getValue();
+//			return e.getKey() + "=" + (value.length == 1 ? value[0] : Arrays.toString(value));
+//		}).collect(Collectors.joining("&")).getBytes();
+		return null;
 	}
 
 	public Map<String, String> getHeaders() {
-		Map<String, String> headers = new HashMap<>(0);
+		Map<String, String> headers = new HashMap(0);
 		Enumeration<String> headerNames = getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String headerName = headerNames.nextElement();
@@ -134,10 +129,19 @@ public class LoggingHttpServletRequestWrapper extends HttpServletRequestWrapper 
 	}
 
 	public Map<String, String> getParameters() {
-		return getParameterMap().entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> {
-			String[] values = e.getValue();
-			return values.length > 0 ? values[0] : "[EMPTY]";
-		}));
+//		return getParameterMap().entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> {
+//			String[] values = e.getValue();
+//			return values.length > 0 ? values[0] : "[EMPTY]";
+//		}));
+		Map<String, String> parameters = new HashMap<String, String>();
+		if (getParameterMap() != null) {
+			for (Entry<String, String[]> entry : getParameterMap().entrySet()) {
+				String key = entry.getKey();
+				String value = entry.getValue().length>0?entry.getValue()[0]:"[EMPTY]";
+				parameters.put(key, value);
+			}
+		}
+		return parameters;
 	}
 
 	public boolean isFormPost() {
@@ -150,16 +154,22 @@ public class LoggingHttpServletRequestWrapper extends HttpServletRequestWrapper 
 		private final Iterator<String> iterator;
 
 		private ParamNameEnumeration(Set<String> values) {
-			this.iterator = values != null ? values.iterator() : Collections.emptyIterator();
+			this.iterator = values != null ? values.iterator() : null;
 		}
 
 		@Override
 		public boolean hasMoreElements() {
+			if (iterator == null) {
+				return false;
+			}
 			return iterator.hasNext();
 		}
 
 		@Override
 		public String nextElement() {
+			if (iterator == null) {
+				throw new NoSuchElementException();
+			}
 			return iterator.next();
 		}
 	}

@@ -5,13 +5,14 @@ import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrapper {
 
+	private final Charset UTF_8 = Charset.forName("UTF-8");
 	private final LoggingServletOutpuStream loggingServletOutpuStream = new LoggingServletOutpuStream();
 
 	private final HttpServletResponse delegate;
@@ -34,7 +35,7 @@ public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrappe
 	}
 
 	public Map<String, String> getHeaders() {
-		Map<String, String> headers = new HashMap<>(0);
+		Map<String, String> headers = new HashMap(0);
 		for (String headerName : getHeaderNames()) {
 			headers.put(headerName, getHeader(headerName));
 		}

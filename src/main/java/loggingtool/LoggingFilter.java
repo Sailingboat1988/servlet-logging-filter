@@ -3,29 +3,22 @@ package loggingtool;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import loggingtool.entity.LoggingRequest;
 import loggingtool.entity.LoggingResponse;
 import loggingtool.wrapper.LoggingHttpServletRequestWrapper;
 import loggingtool.wrapper.LoggingHttpServletResponseWrapper;
+import org.slf4j.Logger;
+
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toSet;
+import static loggingtool.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -79,7 +72,7 @@ public class LoggingFilter implements Filter {
 		String excludedPaths = filterConfig.getInitParameter("excludedPaths");
 		if (isNotBlank(excludedPaths)) {
 			String[] paths = excludedPaths.split("\\s*,\\s*");
-			this.excludedPaths = new HashSet<>(asList(paths));
+			this.excludedPaths = new HashSet(asList(paths));
 		}
 
 		String requestPrefix = filterConfig.getInitParameter("requestPrefix");
@@ -196,7 +189,11 @@ public class LoggingFilter implements Filter {
 
 		public Builder excludedPaths(String... excludedPaths) {
 			requireNonNull(excludedPaths, "excludedPaths must not be null");
-			this.excludedPaths = Stream.of(excludedPaths).collect(toSet());
+			if (excludedPaths != null && excludedPaths.length > 0) {
+				for (String path : excludedPaths) {
+					this.excludedPaths.add(path);
+				}
+			}
 			return this;
 		}
 
