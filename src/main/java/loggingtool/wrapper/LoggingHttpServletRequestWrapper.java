@@ -113,7 +113,21 @@ public class LoggingHttpServletRequestWrapper extends HttpServletRequestWrapper 
 //			String[] value = e.getValue();
 //			return e.getKey() + "=" + (value.length == 1 ? value[0] : Arrays.toString(value));
 //		}).collect(Collectors.joining("&")).getBytes();
-		return null;
+		if (parameterMap == null) {
+			return "".getBytes();
+		}
+		StringBuilder s = new StringBuilder();
+		for (Entry<String, String[]> entry : parameterMap.entrySet()) {
+			String[] value = entry.getValue();
+			if (value == null) {
+				continue;
+			}
+			if (s.length() > 0) {
+				s.append("&");
+			}
+			s.append(entry.getKey()).append("=").append(value.length == 1 ? value[0] : Arrays.toString(value));
+		}
+		return s.toString().getBytes();
 	}
 
 	public Map<String, String> getHeaders() {
