@@ -17,6 +17,8 @@ public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrappe
 
 	private final HttpServletResponse delegate;
 
+	private int httpStatus = 200;
+
 	public LoggingHttpServletResponseWrapper(HttpServletResponse response) {
 		super(response);
 		delegate = response;
@@ -53,6 +55,40 @@ public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrappe
 
 	public byte[] getContentAsBytes() {
 		return loggingServletOutpuStream.baos.toByteArray();
+	}
+
+	@Override
+	public void reset() {
+		super.reset();
+		httpStatus = 200;
+	}
+
+	@Override
+	public void sendError(int sc) throws IOException {
+		httpStatus = sc;
+		super.sendError(sc);
+	}
+
+	@Override
+	public void sendError(int sc, String msg) throws IOException {
+		httpStatus = sc;
+		super.sendError(sc, msg);
+	}
+
+	@Override
+	public void sendRedirect(String location) throws IOException {
+		httpStatus = super.SC_FOUND;
+		super.sendRedirect(location);
+	}
+
+	@Override
+	public void setStatus(int sc) {
+		httpStatus = sc;
+		super.setStatus(sc);
+	}
+
+	public int getStatus() {
+		return httpStatus;
 	}
 
 	private class LoggingServletOutpuStream extends ServletOutputStream {

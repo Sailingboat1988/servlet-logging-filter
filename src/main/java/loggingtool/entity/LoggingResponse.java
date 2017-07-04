@@ -7,6 +7,8 @@ public class LoggingResponse implements Serializable {
 
 	private static final long serialVersionUID = -6692682176015358216L;
 
+	private String uuid;
+
 	private int status;
 
 	private Map<String, String> headers;
@@ -35,5 +37,13 @@ public class LoggingResponse implements Serializable {
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 }

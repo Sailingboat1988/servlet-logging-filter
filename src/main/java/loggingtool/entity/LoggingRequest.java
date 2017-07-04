@@ -7,6 +7,8 @@ public class LoggingRequest implements Serializable {
 
 	private static final long serialVersionUID = -4702574169916528738L;
 
+	private String uuid;
+
 	private String sender;
 
 	private String method;
@@ -65,5 +67,13 @@ public class LoggingRequest implements Serializable {
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 }
