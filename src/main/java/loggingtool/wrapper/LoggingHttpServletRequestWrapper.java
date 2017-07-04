@@ -100,7 +100,7 @@ public class LoggingHttpServletRequestWrapper extends HttpServletRequestWrapper 
 				content = getContentFromParameterMap(this.parameterMap);
 			}
 			String requestEncoding = delegate.getCharacterEncoding();
-			String normalizedContent = StringUtils.normalizeSpace(new String(content, requestEncoding != null ? requestEncoding : UTF_8.name()));
+			String normalizedContent = StringUtils.normalizeSpace(new String(content == null ? "".getBytes() : content, requestEncoding != null ? requestEncoding : UTF_8.name()));
 			return StringUtils.isBlank(normalizedContent) ? "[EMPTY]" : normalizedContent;
 		} catch (IOException e) {
 			e.printStackTrace();
